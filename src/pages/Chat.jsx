@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
-import './App.css'
 
-function App() {
+export function Chat() {
   const [socket, setSocket] = useState(null)
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('') 
   const roomId = 1
-
+  
   useEffect(() => {
-    const ws = new WebSocket(`ws://localhost:3000/cable?room_id=${roomId}`);
+    const ws = new WebSocket(`ws://localhost:3000/cable`);
     
     ws.onopen = () => { 
       const subscriptionMessage = {
@@ -20,7 +19,7 @@ function App() {
       }
       ws.send(JSON.stringify(subscriptionMessage))
     };
-
+  
     ws.onmessage = (event) => { 
       const messageData = JSON.parse(event.data);
       if (messageData.type == 'ping') return;
@@ -29,12 +28,12 @@ function App() {
         setMessages((prevMessages) => [...prevMessages, messageBody])
        }
     };
-
+  
     setSocket(ws);
     
     return () => { ws.close() }
   }, [roomId]);
-
+  
   const sendMessage = () => {
     if (input && socket) {
       const chatMessage = {
@@ -54,6 +53,7 @@ function App() {
         value={input}
         onChange={(e) => setInput(e.target.value)}       
       />
+      
       <button onClick={sendMessage}>
         Send Message
       </button>
@@ -66,6 +66,6 @@ function App() {
       </ul>
     </>
   );
+
 }
 
-export default App;
