@@ -1,6 +1,6 @@
 
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "@/provider/authProvider.jsx";
+import { useAuth } from "../contexts/auth_context";
 
 
 

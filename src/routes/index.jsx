@@ -1,10 +1,12 @@
 import { createBrowserRouter, Link, RouterProvider } from 'react-router-dom'
-import { useAuth } from '@/provider/authProvider'
 import { ProtectedRoute } from "./ProtectedRoute.jsx";
-import { Chat, Login } from '@/pages';
+import { Login } from '@/pages';
+import { useAuth } from '../contexts/auth_context.js';
+import { ChatWindow } from '../pages/ChatWindow.jsx';
 
 const Routes = () => {
   const { token } = useAuth()
+
   const routesForPublic = [
     {
       path: '/about',
@@ -18,7 +20,7 @@ const Routes = () => {
       children: [
         {
           path: '/chat',
-          element: <Chat/>
+          element: <ChatWindow/>
         }
       ]
     }
@@ -36,8 +38,9 @@ const Routes = () => {
 
   const router = createBrowserRouter([
     ...routesForPublic,
-    ...(token ? routesForAuthenticatedOnly : routesForNotAuthenticatedOnly),
-  ])
+    ...(!token ? routesForNotAuthenticatedOnly : []),
+    ...routesForAuthenticatedOnly,
+  ]);
 
   return <RouterProvider router={router}></RouterProvider>
 }

@@ -1,8 +1,8 @@
-import { Chat } from '@/pages'
+import { ChatWindow } from '@/pages'
 
 export const routeList = [
   {
     path: '/',
-    element: <Chat/>
+    element: <ChatWindow/>
   },
 ]
