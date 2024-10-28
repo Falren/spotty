@@ -8,6 +8,7 @@ import {
   Container,
 } from "@mui/material";
 import { IoSend } from "react-icons/io5";
+import { SpotifyAuthorization } from './SpotifyAuthorization'
 import { ChatContainer, MessageBubble, MessageContent, TypingIndicator } from "../styles/ChatStyles";
 import { useAuth } from "../contexts/auth_context";
 
@@ -17,9 +18,9 @@ export const ChatWindow = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [error, setError] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
+  const [isTyping] = useState(false);
   const messagesEndRef = useRef(null);
-  const roomId = 1
+  const roomId = 1;
   useEffect(() => {
     const ws = new WebSocket(`ws://localhost:3000/cable`);
     
@@ -50,7 +51,7 @@ export const ChatWindow = () => {
     setSocket(ws);
     
     return () => { ws.close() }
-  }, [roomId]);
+  }, [roomId, currentUser.id]);
   
   const sendMessage = (newMsg) => {
     if (newMsg && socket) {
@@ -68,16 +69,15 @@ export const ChatWindow = () => {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
   const handleSendMessage = () => {
     if (newMessage.trim() === "") {
       setError("Message cannot be empty");
       return;
     }
     setError("");
-    console.log(currentUser)
     const newMsg = { text: newMessage, sender: currentUser.id, timestamp: new Date() };
     setMessages([...messages, newMsg])
-    console.log(newMsg)
     sendMessage(newMsg);
     setNewMessage("");
   };
@@ -95,6 +95,7 @@ export const ChatWindow = () => {
       >
         LOGOUT
       </Button>
+      <SpotifyAuthorization></SpotifyAuthorization>
       <ChatContainer elevation={3}>
         {messages.map((message, index) => (
           <MessageBubble key={index} iscurrentuser={+(message.sender === currentUser.id)}>

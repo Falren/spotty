@@ -15,7 +15,6 @@ export function Login() {
     try {
       const response = await axios.post('http://localhost:3000/login', {user: {email: emailInput, password: passwordInput}})
       setToken(response.headers['authorization'].split(' ')[1])
-      console.log(response.data.user)
       setCurrentUser(response.data.user)
       navigate("/chat", { replace: true });
     } catch(error) {

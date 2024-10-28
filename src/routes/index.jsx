@@ -1,5 +1,5 @@
 import { createBrowserRouter, Link, RouterProvider } from 'react-router-dom'
-import { ProtectedRoute } from "./ProtectedRoute.jsx";
+import { ProtectedRoute } from "./protectedRoute.jsx";
 import { Login } from '@/pages';
 import { useAuth } from '../contexts/auth_context.js';
 import { ChatWindow } from '../pages/ChatWindow.jsx';
